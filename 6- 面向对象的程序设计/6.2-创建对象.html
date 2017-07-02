@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>6.2 创建对象</title>
+    <script>
+        //// 6.2.1 工厂模式
+        function createPerson(name, age, job) {
+            var o = new Object();
+            o.name = name;
+            o.age = age;
+            o.job = job;
+            o.sayName = function () {
+                alert(this.name)
+            }
+            return o;
+        }
+        var person1=createPerson("nikao",24,"Software Engineer");
+        // 特点:可以无数次调用这个函数，每次返回一个包含三个属性和一个方法的对象；
+        // 缺点:不知道对象的类型；
+
+        //// 6.2.2 构造函数模式
+        // 使用构造函数将前面的例子重写；
+        function Person(name, age, job) {
+            this.name = name;
+            this.age = age;
+            this.job = job;
+            this.sayName = function () {
+                alert(this.name)
+            }
+        }
+        var person1=new Person("nikao",23,"Software Engineer");
+        // 与上述的例子相比，构造函数模式有以下几个不同之处；
+            // 没有显示的创建对象；
+            // 直接将属性和方法赋给了this对象；
+            // 没有return语句；
+        // 创建person的实例，使用了new操作符，以这种方式调用构造函数会经历以下过程；
+            // 创建一个新对象；
+            // 将构造函数的作用域赋给了新对象（也就是this指向了这个新对象）；
+            // 执行构造函数的代码（为这个新对象添加属性和方法）；
+            // 返回新的对象；
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
