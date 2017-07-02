@@ -42,6 +42,26 @@
             // 将构造函数的作用域赋给了新对象（也就是this指向了这个新对象）；
             // 执行构造函数的代码（为这个新对象添加属性和方法）；
             // 返回新的对象；
+        // 检测对象类型
+           // 用instancof操作符，创建的这个对象即是Object的实例，也是Person的实例
+           // alert(person1 instanceof Object); //true   
+           // alert(person1 instanceof Person); //true
+        //// 1将构造函数当做函数
+          // 当做构造函数使用
+          var person=new Person("kaola",24,"soft");
+          console.log(person.name); //"kaola"
+          // 作为普通股函数使用
+          Person("faker",20,"player");
+          window.sayName(); //"faker"
+          // 在另一对象的作用域中使用
+          var o=new Object;
+          Person.call(o,"mater",23,"teacher")
+          o.sayName(); // "mater"
+        //// 2构造函数的问题
+          // 每次实例化都有一个名为sayName()的方法，但每个sayName()方法不是同一个function的实例，因为函数是对象
+        
+        //// 6.2.3 原型模式
+          
     </script>
 </head>
 
