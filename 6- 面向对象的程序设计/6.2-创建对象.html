@@ -18,7 +18,7 @@
             }
             return o;
         }
-        var person1=createPerson("nikao",24,"Software Engineer");
+        var person1 = createPerson("nikao", 24, "Software Engineer");
         // 特点:可以无数次调用这个函数，每次返回一个包含三个属性和一个方法的对象；
         // 缺点:不知道对象的类型；
 
@@ -32,36 +32,51 @@
                 alert(this.name)
             }
         }
-        var person1=new Person("nikao",23,"Software Engineer");
+        var person1 = new Person("nikao", 23, "Software Engineer");
         // 与上述的例子相比，构造函数模式有以下几个不同之处；
-            // 没有显示的创建对象；
-            // 直接将属性和方法赋给了this对象；
-            // 没有return语句；
+        // 没有显示的创建对象；
+        // 直接将属性和方法赋给了this对象；
+        // 没有return语句；
         // 创建person的实例，使用了new操作符，以这种方式调用构造函数会经历以下过程；
-            // 创建一个新对象；
-            // 将构造函数的作用域赋给了新对象（也就是this指向了这个新对象）；
-            // 执行构造函数的代码（为这个新对象添加属性和方法）；
-            // 返回新的对象；
+        // 创建一个新对象；
+        // 将构造函数的作用域赋给了新对象（也就是this指向了这个新对象）；
+        // 执行构造函数的代码（为这个新对象添加属性和方法）；
+        // 返回新的对象；
         // 检测对象类型
-           // 用instancof操作符，创建的这个对象即是Object的实例，也是Person的实例
-           // alert(person1 instanceof Object); //true   
-           // alert(person1 instanceof Person); //true
+        // 用instancof操作符，创建的这个对象即是Object的实例，也是Person的实例
+        // alert(person1 instanceof Object); //true   
+        // alert(person1 instanceof Person); //true
         //// 1将构造函数当做函数
-          // 当做构造函数使用
-          var person=new Person("kaola",24,"soft");
-          console.log(person.name); //"kaola"
-          // 作为普通股函数使用
-          Person("faker",20,"player");
-          window.sayName(); //"faker"
-          // 在另一对象的作用域中使用
-          var o=new Object;
-          Person.call(o,"mater",23,"teacher")
-          o.sayName(); // "mater"
+        // 当做构造函数使用
+        var person = new Person("kaola", 24, "soft");
+        console.log(person.name); //"kaola"
+        // 作为普通股函数使用
+        Person("faker", 20, "player");
+        window.sayName(); //"faker"
+        // 在另一对象的作用域中使用
+        var o = new Object;
+        Person.call(o, "mater", 23, "teacher")
+        o.sayName(); // "mater"
         //// 2构造函数的问题
-          // 每次实例化都有一个名为sayName()的方法，但每个sayName()方法不是同一个function的实例，因为函数是对象
-        
+        // 每次实例化都有一个名为sayName()的方法，但每个sayName()方法不是同一个function的实例，因为函数是对象
+
         //// 6.2.3 原型模式
-          
+        function Persons() { };
+        Persons.prototype.name = "Nichalas";
+        Persons.prototype.age = 19;
+        Persons.prototype.job = "Software Engineer";
+        Persons.prototype.sayName = function () {
+            alert(this.name)
+        };
+        var person1 = new Persons();
+        person1.sayName(); //"Nichalas"
+        var person2 = new Persons();
+        person2.sayName(); //"Nichalas"
+        console.log(person1.sayName==person2.sayName) //true
+
+        //// 
+        //// 1 理解原型对象
+          // 创建一个新函数就会根据一组特定的规则为该函数创建一个prototype属性，56
     </script>
 </head>
 
