@@ -25,26 +25,94 @@
             this.age = age;
         }
         // 继承方法
-        subType.prototype=new superType();
-        subType.prototype.constructor=subType;
-        subType.prototype.sayAge=function(){
+        subType.prototype = new superType();
+        subType.prototype.constructor = subType;
+        subType.prototype.sayAge = function () {
             alert(this.age);
         }
-        var instance1=new subType("Nichos",19);
+        var instance1 = new subType("Nichos", 19);
         console.log(instance1);
         instance1.colors.push("black");
         alert(instance1.colors); //"red,green,blue,black"        
         instance1.sayName(); //"Nichos"
         instance1.sayAge(); //"19"
 
-        var instance2=new subType("Greg",58);
-        alert(instance2.colors); //"red,green,blue"
+        var instance2 = new subType("Greg", 58);
         instance2.sayName(); // "Greg"
         instance2.sayAge(); //27
         // 组合继承的方式避免了原型链和构造函数的缺陷，融合了它们的优点，成为Javascript中最常用
         // 的继承模式
 
-        
+        //// 6.3.4 原型式继承
+        // 定义：借助原型可以基已有的对象创建新对象，同时还不必因此创建自定义类型
+        function object(o) {
+            function F() { };
+            F.prototype = o;
+            return new F();
+        }
+        // 请看下面的例子
+        var person = {
+            name: "nihao",
+            friends: ["Shleb", "Court", "Van"]
+        }
+        var anotherPerson = object(person);
+        anotherPerson.name = "buhao";
+        anotherPerson.friends.push("Rob");
+
+        //// 6.3.6 寄生组合式继承
+        // 寄生组合式模式的不足：无论什么情况下都会调用两次超类型构造函数
+        function SuperType(name) {
+            console.log(this);
+            this.name = name;
+            this.colors = ["red", "green"]
+
+        }
+        SuperType.prototype.sayName = function () {
+            alert(this.name)
+        }
+        function SubType(name, age) {
+            console.log(this)
+            SuperType.call(this, name);  // 第二次调用SuperType()
+            this.age = age;
+        }
+        SubType.prototype = new SuperType(); // 第一次调用SuperType()
+        SubType.prototype.constructor = SubType;
+        SubType.prototype.sayAge = function () {
+            alert(this.age)
+        }
+        var instance = new SubType("nichos", 30);
+        // 注：有两组name和colors属性，一组在实例上(instance),一组在SubType的中
+        // 解决方法：寄生组合式继承
+        // 定义：即通过借用构造函数来继承属性，通过原型链的混成形式来继承方法
+        // 基本思路：不必为了指定子类型的原型而调用超类型的构造函数，我们所需要的无非是
+        // 超类型原型的一个副本而已。本质上就是使用寄生式继承来继承超类型的原型，然后再将结果指定给子类型的
+        // 原型
+        function inheritPrototype(SubType,SuperType){
+            // 第一步：创建超类型原型一个副本
+            var prototype=object(SuperType.prototype);
+            // 第二部：为创建的副本添加constructor属性,从而弥补因重写原型而丢失的constructor属性
+            prototype.constructor=SubType;
+            // 最后一部：将新创建的对象(副本)赋值给子类型的原型
+            SubType.prototype=prototype;
+        }
+        function SuperType1(name) {
+            this.name = name;
+            this.colors=["red","green"];
+        }
+        SuperType1.prototype.sayName=function(){
+            alert(this.name);
+        }
+        function SubType1(name,age){
+            SuperType1.call(this,name);
+            this.age=age;
+        }
+        inheritPrototype(SubType1,SuperType1)
+        SubType.prototype.sayAge=function(){
+            alert(this.age);
+        }
+        var instance1=new SubType("Icon",20);
+        console.log(instance1);
+        instance1.sayName();
     </script>
 </head>
 
