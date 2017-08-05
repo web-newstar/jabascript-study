@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>7.1 递归</title>
+    <script>
+        "use strict";
+        function factorial(num) {
+            if (num <= 1) {
+                return 1;
+            } else {
+                return num * factorial(num - 1)
+            }
+        }
+        console.log(factorial(4));
+        function factorial2(num) {
+            if (num <= 1) {
+                return 1;
+            } else {
+                // return num * arguments.callee(num - 1)
+            }
+        }
+        console.log(factorial2(5));
+        // 严格模式下，不能通过脚本访问argument.callee，但可以使用命名函数表达式来达成相同的效果
+        var factorial3 = (function f(num) {
+            if (num <= 1) {
+                return 1;
+            } else {
+                return num * f(num - 1);
+            }
+        });
+        console.log(factorial3(4));
+
+        function exapmple(num){
+            if (num <= 1) {
+                return 1;
+            } else {
+                return num * exapmple(num - 1);
+            }
+        }
+        var factorial4=exapmple;
+        console.log(factorial4(5))
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

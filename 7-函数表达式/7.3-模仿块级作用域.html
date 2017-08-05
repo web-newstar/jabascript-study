@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>7.3 模仿块级作用域</title>
+    <script>
+        // javascript中没有块级作用域的概念
+        function outputNumber(count) {
+            for (var i = 0; i < count; i++) {
+                console.log(i)
+            }
+            console.log(i) //计数
+        }
+        outputNumber(5);
+        function outPutNumber2(count) {
+            for (var i = 0; i < count; i++) {
+                console.log(i)
+            }
+            var i;
+            console.log(i) //计数
+        }
+        outPutNumber2(5);
+        // 使用匿名函数可以模仿块级作用域并避免这个问题、用块级作用域的匿名函数的语法如下
+        // (function () {
+        //     // 这里是块级作用域代码
+        // })()
+        function outPutNumber3(count) {
+            (function () {
+                for (var i = 0; i < count; i++) {
+                    console.log(i)
+                }
+            })()
+            // console.log(i) // 会报错
+        }
+        outPutNumber3(5);
+        /*在这个重写后的outPutNumber3()函数中，我们在for循环的外部插入了一个私有作用域。
+        在匿名函数中创建的任何一个变量，都会在执行结束时被销毁。而在私有作用域中能够访问到
+        变量count，是因为匿名函数是一个闭包，能够访问作用域中的所有变量*/
+        (function(){
+            var  now=new Date();
+            if(now.getMonth()==7 && now.getDate()==5){
+                alert("加油")
+            }
+        })()
+        // console.log(now); 会报错
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

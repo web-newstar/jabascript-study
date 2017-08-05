@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>7.2 闭包</title>
+    <script>
+        //// 定义：有权访问另一个函数作用域中的变量的函数；
+        function createComparisionFunction(propertyName) {
+            return function (object1, object2) {
+                var value1 = object1.propertyName;
+                var value2 = object2.propertyName;
+                if (value1 < value2) {
+                    return -1;
+                } else if (value1 > value2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+        /* 在这个例子中，value1和value2访问了外部函数的变量(propertyName),
+        即使这个内部函数被返回了，在其他地方被调用了，但它仍然可以访问变量propertyName,
+        是因为在内部函数的作用域中包含了createComparisionFunction的作用域，那么函数在
+        被调用的时候到底发生了什么*/
+        /* 当函数在被调用的时候，会创建一个执行环境以及相应的作用域链。然后，使用argument和其他命名
+        参数的值时来初始化函数的活动对象。但在作用域链中，外部函数的活动对象始终处于第二位，外部函数
+        的外部函数的活动动态处于第三位，……直至作为作用域链的全局执行环境*/
+
+        function compare(value1, value2) {
+            if (value1 < value2) {
+                return -1
+            } else if (value1 > value2) {
+                return 1
+            } else {
+                return 0;
+            }
+        }
+        var result = compare(5, 10);
+        /* 当调用compare()时，会创建一个包含argument、value1、value2的活动对象。全局执行环境的变量
+        对象（result、compare)在compare()的执行环境的作用域中则处于第二位*/
+        /* 全局环境的变量对象始终存在，而像compare()函数这样的局部环境的变量对象，则只在函数
+        执行的过程中存在，在创建compare()函数时，会创建一个预先包含全局变量对象的作用域链，这个作用
+        域链被保存在内部的[[scope]]属性中。当调用compare()函数时，会为函数创建一个执行环境，然后
+        通过复制函数的[[scope]]属性中的对象构建起执行环境的作用域链。此后，又有一个活动对象被创建
+        并被推入执行环境作用域的前端*/
+        /* 作用域链本质上是一个指向变量对象的列表，它只引用但不实际包含对象*/
+
+        // 7.2.1 闭包和变量
+        /* 作用域链的这种机制引出了一个值得注意的副作用，即闭包只能取得包含函数中任何变量的最后一个值
+        */
+        function createFunction() {
+            var result = new Array();
+            for (var i = 0; i < 10; i++) {
+                result[i] = function () {
+                    return i;
+                }
+            }
+            return result;
+        }
+        /* 这个函数会返回一个函数数组，表面上看，似乎每一个函数都返回自己的索引值，即位置0的函数
+        返回0，位置1的函数返回1，以此类推。但实际上，每个函数返回的都是10。但是我们可以通过
+        创建另一个匿名函数强制让闭包的行为符合预期*/
+        function createFunction2() {
+            var result2 = new Array();
+            for (var i = 0; i < 10; i++) {
+                result2[i] = function (num) {
+                    return function () {
+                        return num;
+                    }
+                }(i)
+            }
+            return result2
+        }
+        // 7.2.2 关于this对象
+        /*闭包中使用this对象可能会导致一些问题，我们知道，this对象是在运行时基于函数
+        的执行环境绑定的：在全局函数中，this指的是window对象，而当函数作为某个对象的
+        方法调用时，this等于那个对象。不过匿名函数的执行环境具有全局性，因此thist通常
+        指向window。但有时候由于编写闭包的方式不同，这一点可能不会那么明显*/
+        var name = "The Window";
+        var object = {
+            name: 'my object',
+            getName: function () {
+                return function () {
+                    console.log(this.name);
+                }
+            }
+        }
+        object.getName()();// "The Window" /为什么匿名函数没有取得其包含作用域的this对象呢/
+        /* 函数被调用的时候会自动取得两个变量对象：this和arguments。内部函数在搜索这两个
+        变量时，只会搜索到其活动对象为止，因此不可能不可能直接访问外部函数的这两个变量。不过
+        把外部函数的this对象保存在一个闭包能够访问的变量，就可以让闭包访问该对象了*/
+        var name1 = "The Window";
+        var object1 = {
+            name1: 'my object1',
+            getName1: function () {
+                var that = this;
+                return function () {
+                    console.log(that.name1);
+                }
+            }
+        }
+        object1.getName1()(); //"my object1";
+        
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
