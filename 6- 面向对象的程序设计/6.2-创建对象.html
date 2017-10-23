@@ -72,80 +72,122 @@
         person1.sayName(); //"Nichalas"
         var person2 = new Persons();
         person2.sayName(); //"Nichalas"
-        console.log(person1.sayName==person2.sayName) //true
+        console.log(person1.sayName == person2.sayName) //true
 
         //// 
         //// 1 理解原型对象
-          // 创建一个新函数就会根据一组特定的规则为该函数创建一个prototype属性，这个属性
-          // 指向函数的原型对象,在默认情况下,所有原型对象都活获得一个constructor属性(构造
-          // 函数属性),这个属性包含一个指向prototype属性所在的指针
+        // 创建一个新函数就会根据一组特定的规则为该函数创建一个prototype属性，这个属性
+        // 指向函数的原型对象,在默认情况下,所有原型对象都活获得一个constructor属性(构造
+        // 函数属性),这个属性包含一个指向prototype属性所在的指针
         //// 2 原型与in操作符
-          // 有两种方式使用in操作符:单独使用和for-in循环中使用.在单独使用时,in操作符会在
-          // 通过对象访问给定属性时返回true,无论该属性存在于实例中还是原型中 
-           function Ren() { };
-            Ren.prototype.name = "Nichalas";
-            Ren.prototype.age = 19;
-            Ren.prototype.job = "Software Engineer";
-            Ren.prototype.sayName = function () {
-                alert(this.name)
-            };
-            var newRen1=new Ren();
-            var newRen2=new Ren();
-            console.log(newRen1.hasOwnProperty("name")) // false
-            console.log("name" in  newRen1) // true
-            // 因此同时使用hasOwnProperty和in可以确定属性是存在于对象中,还是存在于原型中
-            function hasPrototypeProperty(object,name){
-                return !object.hasOwnProperty(name) && (name in object)
-            }
+        // 有两种方式使用in操作符:单独使用和for-in循环中使用.在单独使用时,in操作符会在
+        // 通过对象访问给定属性时返回true,无论该属性存在于实例中还是原型中 
+        function Ren() { };
+        Ren.prototype.name = "Nichalas";
+        Ren.prototype.age = 19;
+        Ren.prototype.job = "Software Engineer";
+        Ren.prototype.sayName = function () {
+            alert(this.name)
+        };
+        var newRen1 = new Ren();
+        var newRen2 = new Ren();
+        console.log(newRen1.hasOwnProperty("name")) // false
+        console.log("name" in newRen1) // true
+        // 因此同时使用hasOwnProperty和in可以确定属性是存在于对象中,还是存在于原型中
+        function hasPrototypeProperty(object, name) {
+            return !object.hasOwnProperty(name) && (name in object)
+        }
         //// 4 原型的动态性
-          // 由于在原型中查找值的过程是一次搜索,因此我们在原型中所做的任何修改都能在
-          // 实例上反映出来-即使是先实例再修改原型
-          var friend=new Ren();
-          Ren.prototype.sayHi=function(){
-              console.log("Hi")
-          }
-          friend.sayHi(); // "Hi" 
-          // 原因是因为实例与原型之间的松散连接关系,
+        // 由于在原型中查找值的过程是一次搜索,因此我们在原型中所做的任何修改都能在
+        // 实例上反映出来-即使是先实例再修改原型
+        var friend = new Ren();
+        Ren.prototype.sayHi = function () {
+            console.log("Hi")
+        }
+        friend.sayHi(); // "Hi" 
+        // 原因是因为实例与原型之间的松散连接关系,
         //// 6 原型对象的问题
-          // 1:省略了为构造函数初始化参数这一环节,结果所有实例再默认情况下都将取得相同的属性值
-          // 2:原型模式最大的问题是由其共享本质导致的(对于包含引用类型的属性来说,问题比较突出)
-          function PersonCha(){
+        // 1:省略了为构造函数初始化参数这一环节,结果所有实例再默认情况下都将取得相同的属性值
+        // 2:原型模式最大的问题是由其共享本质导致的(对于包含引用类型的属性来说,问题比较突出)
+        function PersonCha() {
 
-          }
-          PersonCha.prototype={
-              constructor:PersonCha,
-              name:'marton',
-              age:"23",
-              friends:["a","b"]
-          }
-          var newPersonCha1=new PersonCha();
-          var newPersonCha2=new PersonCha();
-          newPersonCha1.friends.push("c");
-          console.log(newPersonCha1.friends.toString()); // a,b,c
-          console.log(newPersonCha2.friends.toString()); // a,b,c
+        }
+        PersonCha.prototype = {
+            constructor: PersonCha,
+            name: 'marton',
+            age: "23",
+            friends: ["a", "b"]
+        }
+        var newPersonCha1 = new PersonCha();
+        var newPersonCha2 = new PersonCha();
+        newPersonCha1.friends.push("c");
+        console.log(newPersonCha1.friends.toString()); // a,b,c
+        console.log(newPersonCha2.friends.toString()); // a,b,c
         //// 6.2.4 组合使用构造函数模式和原型模式
-          // 构造函数模式:用于定义实例属性
-          // 原型模式:用于定义方法和共享的属性
-          // 结果:每个实例都有一份属于自己的实例属性的副本,同时共享着对方法的引用,最大限度的节省了内存
-          function Personss(name,age,job){
-              this.name=name;
-              this.age=age;
-              this.job=job;
-              this.friends=["a","b"]
-          }
-          Personss.prototype={
-              constructor:Person,
-              sayName:function(){
-                  console.log(this)
-                  console.log(this.name)
-              }.bind(Personss)
-          }
-          var person1=new Personss("faker",22,"player");
-          var person2=new Personss("panxiaoting",40,'sport');
-          person1.friends.push("c");
-          console.log(person1.friends.toString()); // a,b,c
-          console.log(person2.friends.toString()); // a,b
-          console.log(person1.sayName()==person2.sayName())
+        // 构造函数模式:用于定义实例属性
+        // 原型模式:用于定义方法和共享的属性
+        // 结果:每个实例都有一份属于自己的实例属性的副本,同时共享着对方法的引用,最大限度的节省了内存
+        function Personss(name, age, job) {
+            this.name = name;
+            this.age = age;
+            this.job = job;
+            this.friends = ["a", "b"]
+        }
+        Personss.prototype = {
+            constructor: Person,
+            sayName: function () {
+                console.log(this.name)
+            }
+        }
+        var person1 = new Personss("faker", 22, "player");
+        var person2 = new Personss("panxiaoting", 40, 'sport');
+        person1.friends.push("c");
+        console.log(person1.friends.toString()); // a,b,c
+        console.log(person2.friends.toString()); // a,b
+        person1.sayName();
+        //// 6.2.5 动态原型模式
+        function PersonS(name) {
+            this.name = name;
+            if (typeof this.sayName != "function") {
+                PersonS.prototype.sayName = function () {
+                    alert(this.name);
+                }
+            }
+            return 2
+        }
+        var personM = new PersonS("faker");
+        console.log(personM)
+        personM.sayName();
+        // 动态原型模式将所有信息封装在了构造函数中,通过检查某个应该存在方法是否有效
+        // 来决定某个应该存在的方法是否有效,来决定是否需要初始化原型
+
+        //// 6.2.6 寄生构造函数模式
+        // 基本思想:创建一个函数,该函数的作用是封装创建对象的代码,然后返回新创建
+        // 对象的代码
+        function PersonSSS(name, job, age) {
+            var o = new Object();
+            o.name = name;
+            o.job = job;
+            o.sayName = function () {
+                console.log(this.name)
+            }
+            return o;
+        }
+        var zhu=new PersonSSS("zhu","pointeer",29);
+        console.log(zhu)
+        friend.sayName(); //""
+        //// 6.2.7 稳妥构造函数模式
+        function PersonN(name){
+            var o=new Object();
+            // 可以在这里定义私有变量和函数
+            o.sayName=function(){
+                console.log(name)
+            }
+            return o;
+        }
+        var friendN=PersonN("leit");
+        console.log(o);
+        
     </script>
 </head>
 
