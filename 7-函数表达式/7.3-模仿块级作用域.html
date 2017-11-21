@@ -8,6 +8,7 @@
     <title>7.3 模仿块级作用域</title>
     <script>
         // javascript中没有块级作用域的概念
+        // 这意味着在块语句中定义的变量，实际上是包含在函数中而非语句中创建的
         function outputNumber(count) {
             for (var i = 0; i < count; i++) {
                 console.log(i)
@@ -27,6 +28,19 @@
         // (function () {
         //     // 这里是块级作用域代码
         // })()
+
+        var somFunction=function(){
+            // 块级作用域
+        }
+        somFunction();
+
+        // 错误做法
+        // function(){
+        //     // 这里是块级作用域
+        // }()
+        // 把函数声明转换成函数表达式，只要像下面这样给它加上一对圆括号就行
+        // (function(){})()
+        
         function outPutNumber3(count) {
             (function () {
                 for (var i = 0; i < count; i++) {
