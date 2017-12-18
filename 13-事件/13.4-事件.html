@@ -10,9 +10,14 @@
         //// 13.4.1 UI事件
           // 1 load 事件
           // js最常用的就是load事件，有两种定义onload事件处理程序的方式
-          EventUtil.addHandler(window,'load',function(event){
-              console.log("load")
-          })
+                EventUtil.addHandler(window,'load',function(event){
+                    console.log("load")
+                })
+          // 第二种指定onload事件处理程序的方式是为<body>元素添加一个onload特性
+        //   <body onload="alert('load')"></body> 
+
+        // 图像上面也可以触发load事件 例如
+        // <img src="sim.jpg" onload="alert('ima loaded')">
     </script>
 </head>
 <body>

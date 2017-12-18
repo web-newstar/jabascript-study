@@ -23,6 +23,39 @@ var EventUtil={
     getTarget:function(event){
         return event.target || event.srcElement
     },
+    getRelatedTarget:function(event){
+        // 在发生mouseover和mouseout事件时，才会涉及相关元素
+        if(event.relatedTarget){
+            return event.relatedTarget
+        }else if(event.toElement){
+            return event.toElement
+        }else if(event.fromElement){
+            return event.fromElement
+        }else{
+            return null
+        }
+    },
+    getButton:function(event){
+        // 对于mousedown和mouseup事件来说，则在event对象上存在一个button属性
+        if(document.implementation.hasFeature('MouseEvents','2.0')){
+            return event.button
+        }else{
+            switch(event.button){
+                case 0:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                return 0;
+                case 2:
+                case 6:
+                return 2;
+                case 4:
+                return 1
+            }
+        }
+
+    }
     preventDefault:function(event){
         if(event.preventDefault){
             event.preventDefault();
