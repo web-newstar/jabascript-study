@@ -54,8 +54,15 @@ var EventUtil={
                 return 1
             }
         }
-
-    }
+        // 在使用onmouseup 事件处理程序时，button的值表示释放的是哪个按钮。
+    },
+    getWheelDelta:function(event){
+        if(event.wheelDelta){
+            return (client.engine.opera && client.engine.opera <9.5?-event.wheelDelta:event.wheelDelta)
+        }else{
+            return -event.detail*40
+        }
+    },
     preventDefault:function(event){
         if(event.preventDefault){
             event.preventDefault();
