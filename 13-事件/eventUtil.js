@@ -75,6 +75,7 @@ var EventUtil={
             event.stopPropagation()
         }else{
             event.cancelBubble=true;
+            
         }
     }
 }
