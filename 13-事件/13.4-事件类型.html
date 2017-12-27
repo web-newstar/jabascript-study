@@ -6,11 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="./eventUtil.js"></script>
-    <script>
-        
-    </script>
+    
 </head>
 <body>
-    
+    <textarea name="" id="myText" cols="30" rows="10"></textarea>
 </body>
+<script>
+    var text=document.getElementById("myText");
+    EventUtil.addHandler(text,'keypress',(event)=>{
+        var event=EventUtil.getEvent(event);
+        var str=EventUtil.getCharCode(event);
+        console.log(String.fromCharCode(str))
+    })
+</script>
 </html>

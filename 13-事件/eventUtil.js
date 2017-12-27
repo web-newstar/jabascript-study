@@ -63,6 +63,14 @@ var EventUtil={
             return -event.detail*40
         }
     },
+    // 跨浏览器方式取得字符编码
+    getCharCode:function(event){
+        if(typeof event.charCode=='number'){
+            return event.charCode
+        }else{
+            return event.keyCode
+        }
+    },
     preventDefault:function(event){
         if(event.preventDefault){
             event.preventDefault();
@@ -79,3 +87,20 @@ var EventUtil={
         }
     }
 }
+
+var result = this.$get("http://manto.daily.taobao.net/workshop/searchCat.do", {
+    count: 1
+  }, {
+    type: 'jsonp'
+  });
+  result.then((value) => {
+    if (value.success) {
+      this.viewState.firstCategoryList = new Array();
+      value.model.forEach((item => {
+        this.viewState.firstCategoryList.push(item.name)
+      }))
+    } else {
+      throw (new Error("数据有误"));
+    }
+  })
+  console.log(this.viewState.firstCategoryList)
